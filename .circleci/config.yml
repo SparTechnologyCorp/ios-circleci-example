@@ -30,7 +30,7 @@ jobs:
       - run:
           name: no doc
           command: |
-            echo 'gem: --no-document' >> ~/.gemrc
+            echo 'gem: --no-document --force' >> ~/.gemrc
 
       - run:
           name: brew update
