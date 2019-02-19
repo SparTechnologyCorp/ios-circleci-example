@@ -68,6 +68,8 @@ jobs:
             rbenv global 2.6.1
             source ~/.bash_profile
             gem install bundler
+            gem update --system
+            rbenv rehash
             which ruby
             ruby -v
       - save_cache:
