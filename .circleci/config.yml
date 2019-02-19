@@ -55,7 +55,7 @@ jobs:
             rbenv shell 2.6.1
             cat ~/.bash_profile
             source ~/.bash_profile
-            gem update --system
+            gem update --system --force
             gem install bundler
             bundle env
             rbenv rehash
