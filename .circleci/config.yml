@@ -50,6 +50,8 @@ jobs:
             brew uninstall chruby
             brew install rbenv ruby-build
             echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+            touch /usr/local/opt/chruby/share/chruby/chruby.sh
+            touch /usr/local/opt/chruby/share/chruby/auto.sh
             source ~/.bash_profile
             cat ~/.bash_profile
             which ruby
@@ -68,6 +70,7 @@ jobs:
             rbenv rehash
             rbenv global 2.6.1
             source ~/.bashrc
+            gem install bundler
             which ruby
             ruby -v
       - save_cache:
