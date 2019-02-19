@@ -21,9 +21,9 @@ jobs:
       - run:
           name: Setup Build
           command: |
-            mkdir -p ~/test-reports
             
-            gem update --system
+            
+            
             brew update
             brew install rbenv ruby-build
             brew install chruby
