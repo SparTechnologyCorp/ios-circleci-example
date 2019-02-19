@@ -85,6 +85,10 @@ jobs:
           paths:
             - ~/.rbenv
 
+      - run:
+          name: bundle install
+          command: bundle install
+
 #       - run:
 #           name: Setup Build
 #           command: |
