@@ -38,12 +38,12 @@ jobs:
           key: v1-macos-gems-{{ checksum "Gemfile" }}
       - restore_cache:
           keys:
-            - v1-homebrew-{{ epoch }}
-            - v1-homebrew
+            - v2-homebrew-{{ epoch }}
+            - v2-homebrew
       - restore_cache:
           keys:
-            - v1-rbenv-2.6.1
-            - v1-rbenv
+            - v2-rbenv-2.6.1
+            - v2-rbenv
       - run:
           name: Setup Build
           command: |
@@ -59,7 +59,7 @@ jobs:
 #  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
 #            brew install chruby
       - save_cache:
-          key: v3-homebrew-{{ epoch }}
+          key: v2-homebrew-{{ epoch }}
           paths:
             - /usr/local/Homebrew
 
@@ -74,7 +74,7 @@ jobs:
             which ruby
             ruby -v
       - save_cache:
-          key: v1-rbenv-2.6.1
+          key: v2-rbenv-2.6.1
           paths:
             - ~/.rbenv
 
