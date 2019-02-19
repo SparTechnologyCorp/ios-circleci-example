@@ -63,7 +63,7 @@ jobs:
           name: add homebrew path
           command: echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
 
-       - save_cache:
+      - save_cache:
           key: v2-bashprofile
           paths:
             - ~/.bash_profile
