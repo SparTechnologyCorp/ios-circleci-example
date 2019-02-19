@@ -13,11 +13,11 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2-spar-homebrew
+            - v2-homebrew
 
       - restore_cache:
           keys:
-            - v2-spar
+            - v2-ruby-2.6.1
       # - restore_cache:
       #     keys:
       #       - v4-rbenv-{{ checksum "Gemfile" }}
@@ -46,7 +46,7 @@ jobs:
           command: brew install rbenv ruby-build
 
       - save_cache:
-          key: v2-spar-homebrew
+          key: v2-homebrew
           paths:
             - /usr/local/Homebrew
             - /usr/local/bin
@@ -81,7 +81,7 @@ jobs:
           command: gem update --system
       
       - save_cache:
-          key: v2-spar
+          key: v2-ruby-2.6.1
           paths:
             - ~/.rbenv
 
