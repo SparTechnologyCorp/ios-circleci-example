@@ -40,6 +40,10 @@ jobs:
           keys:
             - v3-homebrew-{{ epoch }}
             - v3-homebrew
+      - restore_cache:
+          keys:
+            - v3-rbenv-2.6.1
+            - v3-rbenv
       - run:
           name: Setup Build
           command: |
@@ -51,16 +55,28 @@ jobs:
             echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
             brew install chruby
             ruby-install --install-dir ~/.rbenv/versions/2.6.1 ruby 2.6.1
-            echo "2.6.1" > .ruby-version
+            
             gem install bundler
             which ruby
             ruby -v
-            bundle check --path .bundle || bundle install --jobs=4 --retry=3 --path .bundle
 
       - save_cache:
           key: v3-homebrew-{{ epoch }}
           paths:
             - /usr/local/Homebrew
+      - save_cache:
+          key: v3-rbenv-2.6.1
+          paths:
+            - ~/.rbenv
+
+      - run:
+          name: Setup Build
+          command: |
+            source ~/.bashrc 
+            echo "2.6.1" > .ruby-version
+            which ruby
+            ruby -v
+            bundle check --path .bundle || bundle install --jobs=4 --retry=3 --path .bundle
       - save_cache:
           key: v1-macos-gems-{{ checksum "Gemfile" }}
           paths:
