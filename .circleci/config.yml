@@ -89,7 +89,7 @@ jobs:
           command: gem update --system
 
       - run:
-          name: gem install bundler
+          name: gem install bundler --force
           command: gem install bundler
 
       - run:
