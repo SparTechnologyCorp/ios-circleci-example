@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Setup Build
           command: |
-            brew update
+            brew uninstall chruby
             brew install rbenv
             echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
             source ~/.bash_profile
