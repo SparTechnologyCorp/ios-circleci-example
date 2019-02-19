@@ -47,16 +47,10 @@ jobs:
       - run:
           name: Setup Build
           command: |
-            
-            
-            
             brew update
             brew install rbenv
             echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
             brew install chruby
-            ruby-install --install-dir ~/.rbenv/versions/2.6.1 ruby 2.6.1
-            
-            gem install bundler
             which ruby
             ruby -v
 
@@ -64,6 +58,14 @@ jobs:
           key: v3-homebrew-{{ epoch }}
           paths:
             - /usr/local/Homebrew
+
+      - run:
+          name: Setup Build
+          command: |
+            ruby-install --install-dir ~/.rbenv/versions/2.6.1 ruby 2.6.1
+            source ~/.bashrc
+            which ruby
+            ruby -v
       - save_cache:
           key: v3-rbenv-2.6.1
           paths:
