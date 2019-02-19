@@ -17,7 +17,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-spar
+            - v2-spar
       # - restore_cache:
       #     keys:
       #       - v4-rbenv-{{ checksum "Gemfile" }}
@@ -81,7 +81,7 @@ jobs:
           command: gem update --system
       
       - save_cache:
-          key: v1-spar
+          key: v2-spar
           paths:
             - ~/.rbenv
 
