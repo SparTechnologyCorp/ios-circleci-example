@@ -31,7 +31,7 @@ jobs:
 
       - run:
           name: brew upgrade
-          command: brew upgrace
+          command: brew upgrade
       
       - run:
           name: Uninstall chruby
@@ -48,6 +48,14 @@ jobs:
       - run:
           name: add homebrew path
           command: echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
+
+      - run:
+          name: source
+          command: source ~/.bash_profile
+
+      - run:
+          name: install 2.6.1
+          command: rbenv install 2.6.1 -s
       
       - save_cache:
           key: v1-spar
@@ -55,7 +63,7 @@ jobs:
             - /usr/local/Homebrew
             - ~/.rbenv
             - /usr/local/bin
-      
+
 #       - run:
 #           name: Setup Build
 #           command: |
