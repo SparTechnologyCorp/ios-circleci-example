@@ -49,13 +49,12 @@ jobs:
           command: |
             brew update
             brew install rbenv
-            rbenv init
             echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
-            curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
-            brew install chruby
+            source ~/.bash_profile
             which ruby
             ruby -v
-
+#  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
+#            brew install chruby
       - save_cache:
           key: v3-homebrew-{{ epoch }}
           paths:
