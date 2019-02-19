@@ -51,6 +51,7 @@ jobs:
             rbenv install 2.6.1 -s
             rbenv rehash
             rbenv global 2.6.1
+            rbenv local 2.6.1
             cat ~/.bash_profile
             source ~/.bash_profile
             gem install bundler
@@ -76,6 +77,8 @@ jobs:
           command: |
             which ruby
             ruby -v
+            gem update
+            gem install bundler
             bundler -v
             bundle install --binstubs
             bundle check || bundle install
