@@ -30,7 +30,7 @@ jobs:
       FL_OUTPUT_DIR: output
       LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8
-    shell: /bin/bash --login -eo pipefail
+    shell: /bin/bash --login -o pipefail
     steps:
       - checkout
 
