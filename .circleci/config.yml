@@ -52,10 +52,12 @@ jobs:
             rbenv rehash
             rbenv global 2.6.1
             rbenv local 2.6.1
+            rbenv shell 2.6.1
             cat ~/.bash_profile
             source ~/.bash_profile
-            gem install bundler
             gem update --system
+            gem install bundler
+            bundle env
             rbenv rehash
             which ruby
             ruby -v
