@@ -1,28 +1,6 @@
 version: 2
 
 jobs:
-  "Execute tests on Ubuntu":
-    environment:
-      CIRCLE_TEST_REPORTS: ~/test-reports
-      LC_ALL: C.UTF-8
-      LANG: C.UTF-8
-      FASTLANE_ITUNES_TRANSPORTER_PATH: .bundle
-    docker:
-      - image: fastlanetools/fastlane:2.3.4
-    steps:
-      - checkout
-
-      - restore_cache:
-          key: v1-ubuntu-gems-{{ checksum "Gemfile" }}
-      - run:
-          name: Setup Build
-          command: |
-            mkdir -p ~/test-reports
-            bundle check --path .bundle || bundle install --jobs=4 --retry=3 --path .bundle
-      - save_cache:
-          key: v1-ubuntu-gems-{{ checksum "Gemfile" }}
-          paths:
-            - .bundle
   build:
     macos:
       xcode: "10.1.0"
@@ -33,57 +11,90 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-      # - restore_cache:
-      #     keys:
-      #       - v3-homebrew
+      - restore_cache:
+          keys:
+            - v1-spar
       # - restore_cache:
       #     keys:
       #       - v4-rbenv-{{ checksum "Gemfile" }}
       #       - v4-rbenv-2.6.1
       #       - v3-rbenv
+      
       - run:
-          name: Setup Build
-          command: |
-            brew uninstall chruby
-            brew install rbenv ruby-build
-            echo 'eval "$(rbenv init -)"' > ~/.bash_profile
-            echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
-            rbenv install 2.6.1 -s
-            rbenv rehash
-            rbenv global 2.6.1
-            rbenv local 2.6.1
-            rbenv shell 2.6.1
-            cat ~/.bash_profile
-            source ~/.bash_profile
-            gem update --system --force
-            gem install bundler
-            bundle env
-            rbenv rehash
-            which ruby
-            ruby -v
-#  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
-#            brew install chruby
+          name: no doc
+          command: echo 'gem: --no-ri --no-rdoc' > ~/.gemrc
+
+      - run:
+          name: brew update
+          command: brew update
+
+      - run:
+          name: brew upgrade
+          command: brew upgrace
+      
+      - run:
+          name: Uninstall chruby
+          command: brew uninstall chruby
+
+      - run:
+          name: brew install rbenv ruby-build
+          command: brew install rbenv ruby-build
+
+      - run:
+          name: echo 'eval "$(rbenv init -)"' > ~/.bash_profile
+          command: echo 'eval "$(rbenv init -)"' > ~/.bash_profile
+
+      - run:
+          name: add homebrew path
+          command: echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
+      
       - save_cache:
-          key: v7-homebrew
-          paths:
-            - /usr/local/Homebrew
-            - ~/.rbenv
+        key: v1-spar
+        paths:
+          - /usr/local/Homebrew
+          - ~/.rbenv
+          - /usr/local/bin
+      
+#       - run:
+#           name: Setup Build
+#           command: |
+#             echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
+#             rbenv install 2.6.1 -s
+#             rbenv rehash
+#             rbenv global 2.6.1
+#             rbenv local 2.6.1
+#             rbenv shell 2.6.1
+#             cat ~/.bash_profile
+#             source ~/.bash_profile
+#             gem update --system --force
+#             gem install bundler
+#             bundle env
+#             rbenv rehash
+#             which ruby
+#             ruby -v
+# #  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
+# #            brew install chruby
+#       - save_cache:
+#           key: v7-homebrew
+#           paths:
+#             - /usr/local/Homebrew
+#             - ~/.rbenv
 
-      # - save_cache:
-      #     key: v4-rbenv-2.6.1
-      #     paths:
-      #       - ~/.rbenv
+#       # - save_cache:
+#       #     key: v4-rbenv-2.6.1
+#       #     paths:
+#       #       - ~/.rbenv
 
-      - run:
-          name: Setup Build
-          command: |
-            which ruby
-            ruby -v
-            gem update
-            gem install bundler
-            bundler -v
-            bundle install --binstubs
-            bundle check || bundle install
+#       - run:
+#           name: Setup Build
+#           command: |
+#             which ruby
+#             ruby -v
+#             gem update
+#             gem install bundler
+#             bundler -v
+#             bundle install --binstubs
+#             bundle check || bundle install
       # - save_cache:
       #     key: v4-rbenv-{{ checksum "Gemfile" }}
       #     paths:
