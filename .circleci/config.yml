@@ -33,15 +33,13 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-
-      - restore_cache:
-          key: v2-macos-gems-{{ checksum "Gemfile" }}
       - restore_cache:
           keys:
             - v2-homebrew-{{ epoch }}
             - v2-homebrew
       - restore_cache:
           keys:
+            - v3-rbenv-{{ checksum "Gemfile" }}
             - v3-rbenv-2.6.1
             - v3-rbenv
       - run:
@@ -84,11 +82,11 @@ jobs:
             echo "2.6.1" > .ruby-version
             which ruby
             ruby -v
-            bundle check --path .bundle || bundle install --jobs=4 --retry=3 --path .bundle
+            bundle install --jobs=4 --retry=3
       - save_cache:
-          key: v2-macos-gems-{{ checksum "Gemfile" }}
+          key: v3-rbenv-{{ checksum "Gemfile" }}
           paths:
-            - .bundle
+            - ~/.rbenv
 
       - store_artifacts:
           path: output
