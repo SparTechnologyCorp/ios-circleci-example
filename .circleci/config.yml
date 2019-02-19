@@ -1,6 +1,28 @@
 version: 2
 
 jobs:
+  "Execute tests on Ubuntu":
+    environment:
+      CIRCLE_TEST_REPORTS: ~/test-reports
+      LC_ALL: C.UTF-8
+      LANG: C.UTF-8
+      FASTLANE_ITUNES_TRANSPORTER_PATH: .bundle
+    docker:
+      - image: fastlanetools/fastlane:2.3.4
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-ubuntu-gems-{{ checksum "Gemfile" }}-{{ checksum "fastlane.gemspec" }}
+      - run:
+          name: Setup Build
+          command: |
+            mkdir -p ~/test-reports
+            bundle check --path .bundle || bundle install --jobs=4 --retry=3 --path .bundle
+      - save_cache:
+          key: v1-ubuntu-gems-{{ checksum "Gemfile" }}-{{ checksum "fastlane.gemspec" }}
+          paths:
+            - .bundle
   build:
     macos:
       xcode: "10.1.0"
@@ -25,10 +47,8 @@ jobs:
             
             
             brew update
-            brew install rbenv ruby-build
             brew install chruby
-            echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
-            rbenv install 2.6.1
+            ruby-install 2.6.1
             echo "2.6.1" > .ruby-version
             gem install bundler
             which ruby
@@ -72,3 +92,8 @@ jobs:
       #     name: Post Test Results to GitHub
       #     command: bundle exec danger || echo "danger failed"
       #     when: always # Run this even when tests fail
+workflows:
+  version: 2
+  build:
+    jobs:
+      - "Execute tests on Ubuntu"
