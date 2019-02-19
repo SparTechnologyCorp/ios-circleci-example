@@ -63,7 +63,7 @@ jobs:
       - run:
           name: Setup Build
           command: |
-            rbenv install 2.6.1
+            rbenv install 2.6.1 -s
             source ~/.bashrc
             which ruby
             ruby -v
