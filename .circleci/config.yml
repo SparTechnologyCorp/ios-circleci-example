@@ -35,23 +35,22 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-macos-gems-{{ checksum "Gemfile" }}
+          key: v2-macos-gems-{{ checksum "Gemfile" }}
       - restore_cache:
           keys:
             - v2-homebrew-{{ epoch }}
             - v2-homebrew
       - restore_cache:
           keys:
-            - v2-rbenv-2.6.1
-            - v2-rbenv
+            - v3-rbenv-2.6.1
+            - v3-rbenv
       - run:
           name: Setup Build
           command: |
             brew uninstall chruby
             brew install rbenv ruby-build
-            echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
-            touch /usr/local/opt/chruby/share/chruby/chruby.sh
-            touch /usr/local/opt/chruby/share/chruby/auto.sh
+            echo 'eval "$(rbenv init -)"' > ~/.bash_profile
+            echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
             source ~/.bash_profile
             cat ~/.bash_profile
             which ruby
@@ -69,25 +68,25 @@ jobs:
             rbenv install 2.6.1 -s
             rbenv rehash
             rbenv global 2.6.1
-            source ~/.bashrc
+            source ~/.bash_profile
             gem install bundler
             which ruby
             ruby -v
       - save_cache:
-          key: v2-rbenv-2.6.1
+          key: v3-rbenv-2.6.1
           paths:
             - ~/.rbenv
 
       - run:
           name: Setup Build
           command: |
-            source ~/.bashrc 
+            source ~/.bash_profile 
             echo "2.6.1" > .ruby-version
             which ruby
             ruby -v
             bundle check --path .bundle || bundle install --jobs=4 --retry=3 --path .bundle
       - save_cache:
-          key: v1-macos-gems-{{ checksum "Gemfile" }}
+          key: v2-macos-gems-{{ checksum "Gemfile" }}
           paths:
             - .bundle
 
