@@ -1,11 +1,11 @@
 version: 2
 
 jobs:
-  "Execute tests on macOS":
+  build:
     macos:
       xcode: "10.1.0"
     environment:
-      CIRCLE_TEST_REPORTS: ~/test-reports
+      FL_OUTPUT_DIR: output
       LC_ALL: en_US.UTF-8
       LANG: en_US.UTF-8
     shell: /bin/bash --login -eo pipefail
@@ -13,7 +13,7 @@ jobs:
       - checkout
 
       - restore_cache:
-          key: v1-macos-gems-{{ checksum "Gemfile" }}-{{ checksum "fastlane.gemspec" }}
+          key: v1-macos-gems-{{ checksum "Gemfile" }}
       - restore_cache:
           keys:
             - v3-homebrew-{{ epoch }}
@@ -22,9 +22,17 @@ jobs:
           name: Setup Build
           command: |
             mkdir -p ~/test-reports
-            echo "2.3" > .ruby-version
+            
             gem update --system
-            brew install shellcheck
+            brew update
+            brew install rbenv ruby-build
+            brew install chruby
+            echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+            rbenv install 2.6.1
+            echo "2.6.1" > .ruby-version
+            gem install bundler
+            which ruby
+            ruby -v
             bundle check --path .bundle || bundle install --jobs=4 --retry=3 --path .bundle
 
       - save_cache:
@@ -36,26 +44,31 @@ jobs:
           paths:
             - .bundle
 
-      - run:
-          name: Check PR Metadata
-          command: bundle exec danger || echo "danger failed"
-
-      - restore_cache:
-          key: v1-{{ arch }}-rubocop
-
-      - run: bundle exec fastlane execute_tests
-
-      - save_cache:
-          key: v1-{{ arch }}-rubocop
-          paths:
-            - ~/.cache/rubocop_cache
-      - store_test_results:
-          path: ~/test-reports
       - store_artifacts:
-          path: ~/test-reports/rspec
-          destination: test-reports
+          path: output
+      - store_test_results:
+          path: output/scan
 
-      - run:
-          name: Post Test Results to GitHub
-          command: bundle exec danger || echo "danger failed"
-          when: always # Run this even when tests fail
+      # - run:
+      #     name: Check PR Metadata
+      #     command: bundle exec danger || echo "danger failed"
+
+      # - restore_cache:
+      #     key: v1-{{ arch }}-rubocop
+
+      # - run: bundle exec fastlane execute_tests
+
+      # - save_cache:
+      #     key: v1-{{ arch }}-rubocop
+      #     paths:
+      #       - ~/.cache/rubocop_cache
+      # - store_test_results:
+      #     path: ~/test-reports
+      # - store_artifacts:
+      #     path: ~/test-reports/rspec
+      #     destination: test-reports
+
+      # - run:
+      #     name: Post Test Results to GitHub
+      #     command: bundle exec danger || echo "danger failed"
+      #     when: always # Run this even when tests fail
