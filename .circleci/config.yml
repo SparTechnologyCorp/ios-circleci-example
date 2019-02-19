@@ -38,12 +38,12 @@ jobs:
           key: v1-macos-gems-{{ checksum "Gemfile" }}
       - restore_cache:
           keys:
-            - v3-homebrew-{{ epoch }}
-            - v3-homebrew
+            - v1-homebrew-{{ epoch }}
+            - v1-homebrew
       - restore_cache:
           keys:
-            - v3-rbenv-2.6.1
-            - v3-rbenv
+            - v1-rbenv-2.6.1
+            - v1-rbenv
       - run:
           name: Setup Build
           command: |
@@ -51,6 +51,7 @@ jobs:
             brew install rbenv ruby-build
             echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
             source ~/.bash_profile
+            cat ~/.bash_profile
             which ruby
             ruby -v
 #  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
@@ -70,7 +71,7 @@ jobs:
             which ruby
             ruby -v
       - save_cache:
-          key: v3-rbenv-2.6.1
+          key: v1-rbenv-2.6.1
           paths:
             - ~/.rbenv
 
