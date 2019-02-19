@@ -13,7 +13,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-spar-homebrew
+            - v2-spar-homebrew
 
       - restore_cache:
           keys:
@@ -46,10 +46,11 @@ jobs:
           command: brew install rbenv ruby-build
 
       - save_cache:
-          key: v1-spar-homebrew
+          key: v2-spar-homebrew
           paths:
             - /usr/local/Homebrew
             - /usr/local/bin
+            - /usr/local/Cellar/
 
       - run:
           name: echo 'eval "$(rbenv init -)"' > ~/.bash_profile
