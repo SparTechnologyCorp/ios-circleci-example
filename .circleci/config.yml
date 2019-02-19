@@ -49,7 +49,9 @@ jobs:
           command: |
             brew update
             brew install rbenv
+            rbenv init
             echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+            curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
             brew install chruby
             which ruby
             ruby -v
@@ -62,7 +64,7 @@ jobs:
       - run:
           name: Setup Build
           command: |
-            ruby-install --install-dir ~/.rbenv/versions/2.6.1 ruby 2.6.1
+            rbenv install 2.6.1
             source ~/.bashrc
             which ruby
             ruby -v
