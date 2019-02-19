@@ -22,7 +22,8 @@ jobs:
       
       - run:
           name: no doc
-          command: echo 'gem: --no-ri --no-rdoc' > ~/.gemrc
+          command: |
+            echo 'gem: --no-document' >> ~/.gemrc
 
       - run:
           name: brew update
