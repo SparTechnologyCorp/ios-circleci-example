@@ -84,7 +84,8 @@ jobs:
             echo "2.6.1" > .ruby-version
             which ruby
             ruby -v
-            bundle install --jobs=4 --retry=3
+            bundler -v
+            bundle check || bundle install
       - save_cache:
           key: v3-rbenv-{{ checksum "Gemfile" }}
           paths:
