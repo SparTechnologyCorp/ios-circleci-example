@@ -50,11 +50,11 @@ jobs:
           command: echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
       
       - save_cache:
-        key: v1-spar
-        paths:
-          - /usr/local/Homebrew
-          - ~/.rbenv
-          - /usr/local/bin
+          key: v1-spar
+          paths:
+            - /usr/local/Homebrew
+            - ~/.rbenv
+            - /usr/local/bin
       
 #       - run:
 #           name: Setup Build
