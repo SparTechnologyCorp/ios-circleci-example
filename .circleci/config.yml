@@ -85,6 +85,7 @@ jobs:
             which ruby
             ruby -v
             bundler -v
+            bundle install --binstubs
             bundle check || bundle install
       - save_cache:
           key: v3-rbenv-{{ checksum "Gemfile" }}
