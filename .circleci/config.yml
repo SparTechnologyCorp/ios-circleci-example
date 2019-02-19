@@ -61,7 +61,7 @@ jobs:
 #  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
 #            brew install chruby
       - save_cache:
-          key: v3-homebrew
+          key: v7-homebrew
           paths:
             - /usr/local/Homebrew
             - ~/.rbenv
