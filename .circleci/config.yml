@@ -13,6 +13,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
+            - v1-spar-homebrew
+
+      - restore_cache:
+          keys:
             - v1-spar
       # - restore_cache:
       #     keys:
@@ -41,6 +45,12 @@ jobs:
           name: brew install rbenv ruby-build
           command: brew install rbenv ruby-build
 
+      - save_cache:
+          key: v1-spar-homebrew
+          paths:
+            - /usr/local/Homebrew
+            - /usr/local/bin
+
       - run:
           name: echo 'eval "$(rbenv init -)"' > ~/.bash_profile
           command: echo 'eval "$(rbenv init -)"' > ~/.bash_profile
@@ -56,13 +66,23 @@ jobs:
       - run:
           name: install 2.6.1
           command: rbenv install 2.6.1 -s
+
+      - run:
+          name: rbenv global 2.6.1
+          command: rbenv global 2.6.1
+
+      - run:
+          name: rbenv rehash
+          command: rbenv rehash
+
+      - run:
+          name: gem update --system
+          command: gem update --system
       
       - save_cache:
           key: v1-spar
           paths:
-            - /usr/local/Homebrew
             - ~/.rbenv
-            - /usr/local/bin
 
 #       - run:
 #           name: Setup Build
