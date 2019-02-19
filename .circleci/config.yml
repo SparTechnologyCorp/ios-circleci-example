@@ -33,14 +33,14 @@ jobs:
     shell: /bin/bash --login -o pipefail
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v3-homebrew
-      - restore_cache:
-          keys:
-            - v4-rbenv-{{ checksum "Gemfile" }}
-            - v4-rbenv-2.6.1
-            - v3-rbenv
+      # - restore_cache:
+      #     keys:
+      #       - v3-homebrew
+      # - restore_cache:
+      #     keys:
+      #       - v4-rbenv-{{ checksum "Gemfile" }}
+      #       - v4-rbenv-2.6.1
+      #       - v3-rbenv
       - run:
           name: Setup Build
           command: |
@@ -48,8 +48,14 @@ jobs:
             brew install rbenv ruby-build
             echo 'eval "$(rbenv init -)"' > ~/.bash_profile
             echo 'export PATH=/usr/local/bin:$PATH' >> ~/.bash_profile
-            source ~/.bash_profile
+            rbenv install 2.6.1 -s
+            rbenv rehash
+            rbenv global 2.6.1
             cat ~/.bash_profile
+            source ~/.bash_profile
+            gem install bundler
+            gem update --system
+            rbenv rehash
             which ruby
             ruby -v
 #  curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-doctor | bash
@@ -58,38 +64,25 @@ jobs:
           key: v3-homebrew
           paths:
             - /usr/local/Homebrew
-
-      - run:
-          name: Setup Build
-          command: |
-            rbenv install 2.6.1 -s
-            rbenv rehash
-            rbenv global 2.6.1
-            source ~/.bash_profile
-            gem install bundler
-            gem update --system
-            rbenv rehash
-            which ruby
-            ruby -v
-      - save_cache:
-          key: v4-rbenv-2.6.1
-          paths:
             - ~/.rbenv
 
+      # - save_cache:
+      #     key: v4-rbenv-2.6.1
+      #     paths:
+      #       - ~/.rbenv
+
       - run:
           name: Setup Build
           command: |
-            source ~/.bash_profile 
-            echo "2.6.1" > .ruby-version
             which ruby
             ruby -v
             bundler -v
             bundle install --binstubs
             bundle check || bundle install
-      - save_cache:
-          key: v4-rbenv-{{ checksum "Gemfile" }}
-          paths:
-            - ~/.rbenv
+      # - save_cache:
+      #     key: v4-rbenv-{{ checksum "Gemfile" }}
+      #     paths:
+      #       - ~/.rbenv
 
       - store_artifacts:
           path: output
