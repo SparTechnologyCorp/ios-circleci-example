@@ -48,7 +48,7 @@ jobs:
           name: Setup Build
           command: |
             brew uninstall chruby
-            brew install rbenv
+            brew install rbenv ruby-build
             echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
             source ~/.bash_profile
             which ruby
@@ -64,6 +64,8 @@ jobs:
           name: Setup Build
           command: |
             rbenv install 2.6.1 -s
+            rbenv rehash
+            rbenv global 2.6.1
             source ~/.bashrc
             which ruby
             ruby -v
