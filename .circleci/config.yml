@@ -47,9 +47,10 @@ jobs:
             
             
             brew update
+            brew install rbenv
+            echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
             brew install chruby
-            ruby-install 2.6.1
-            source ~/.bashrc
+            ruby-install --install-dir ~/.rbenv/versions/2.6.1 ruby 2.6.1
             echo "2.6.1" > .ruby-version
             gem install bundler
             which ruby
